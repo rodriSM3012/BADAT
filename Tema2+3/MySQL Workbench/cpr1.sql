@@ -30,6 +30,12 @@ create table modulos(
 create table matricular(
 	numMat varchar(7),
     codigo varchar(5),
-    nota int(3),
-    primary key(numMat, codigo)
+    nota decimal(5,2),
+    -- 5 = total	2 = decimales
+    primary key(numMat, codigo),
+    constraint pk
+    -- constraint = crear una regla
+    -- el nombre de la regla no se puede repetir
+    -- pk(primary key), fk(foreign key) y ck(check) son mnemotecnicos para las reglas
+    -- fkMatAlum = foreign key que relaciona la tabla matricula y alumnos
 );
