@@ -1,0 +1,7 @@
+1- darle al play verde
+2- uncheck todas menos entities, relationships y user groups
+3- ir a detail settings (arriba)
+4- quitar "use quotation marks", "create triggers for update noseque"
+5- activar "drop tables with CASCADE CONSTRAITS
+6- quitar las que hay debajo
+7- darle a generate (si aparece coso darle a si) y luego a show code
