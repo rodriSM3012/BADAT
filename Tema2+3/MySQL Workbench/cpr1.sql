@@ -12,7 +12,7 @@ create table alumnos(
     apellidos varchar(50),
     fechaNac date,
     dir varchar(50),
-    telf varchar(9),
+    telf varchar(9) comment 'Móvil', -- comentario para un campo
     edad int,
     primary key(numMat),
     -- al usar este metodo se pueden crear claves compuestas
@@ -73,12 +73,13 @@ add
 
 -- para borrar una tabla
 -- da error por que las pk de esta tabla ya son fk en otras tablas
-drop table alumnos;
-
--- al ejecutar esto ya deja ejecutar la de arriba
-alter table
-    matricular drop foreign key fk_AlumMat;
-
+/*
+ drop table alumnos;
+ 
+ -- al ejecutar esto ya deja ejecutar la de arriba
+ alter table
+ matricular drop foreign key fk_AlumMat;
+ */
 -- para cambiar el nombre de una tabla
 rename table profesores to tutores;
 
@@ -88,11 +89,11 @@ alter table
     alumnos
 add
     column cp char(5);
-
+/*
 -- para borrar una columna
 alter table
     alumnos drop column cp;
-
+*/
 -- para modificar el tipo de dato de una columna
 alter table
     alumnos
@@ -105,4 +106,33 @@ alter table
     alumnos change column cp codPostal char(5);
 
 -- mostrar informacion sobre los privilegios necesarios para ejecutar ciertas cosas
-show privileges;
+-- show privileges;
+
+create user 'alumno' @'%' identified by 'alumno';
+drop user 'alumno' @'%';
+
+insert into alumnos values ('2024001', 'JUAN', 'ARIAS GARCÍA', '2000-01-27', 'LOPE DE VEGA', '123121212', '25', '33204');
+insert into modulos values ('BADAT', 'BASES DE DATOS', 1, 'DAW', 5);
+select * from modulos;
+insert into matricular values ('2024001', 'BADAT', 7.50);
+insert into alumnos values ('2024002', 'ANA', 'ARIAS GARCÍA', '2000-01-27', 'LOPE DE VEGA', '123121212', '25', '33204');
+delete from alumnos where (numMat='2024002');
+-- alter table alumnos drop column Mov; -- para borrar una fila entera y todos los datos que hubiese dentro
+
+describe alumnos;
+
+-- muestra los campos de datos y los tipos de datos
+alter table
+    alumnos
+add
+    constraint ck_Alumn check(Nombre = lower(Nombre));
+
+describe tutores;
+alter table tutores add column dir varchar(50);
+-- para seleccionar ciertos campos en concreto (solo se pueden ignorar campos que no sean no nulos)
+insert into tutores (id, nombre, apellidos, sueldo) values ('001', 'LUIS', 'GONZÁLEZ DÍAZ', 1200.50);
+select * from tutores;
+
+insert into tutores (id, nombre, apellidos) values ('002', 'CARMEN', 'FERNÁNDEZ LÓPEZ');
+truncate table tutores;
+alter table impartir drop foreign key fk_ImpProf;
