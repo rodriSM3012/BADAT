@@ -21,7 +21,7 @@ create table alumnos(
         and 35
     ) -- between si ambos extremos son inclusive   
     -- se puede poner (edad >= 18 and edad <= 35) 
-);
+) comment 'Tabla alumnos';
 
 create table modulos(
     codigo varchar(5),
@@ -113,9 +113,19 @@ drop user 'alumno' @'%';
 
 insert into alumnos values ('2024001', 'JUAN', 'ARIAS GARCÍA', '2000-01-27', 'LOPE DE VEGA', '123121212', '25', '33204');
 insert into modulos values ('BADAT', 'BASES DE DATOS', 1, 'DAW', 5);
+insert into modulos values ('PROGR', 'PROGRAMACION', 1, 'DAW', 7);
+insert into modulos values ('LMSGI', 'LENGUAJE MARCAS', 1, 'DAW', 3);
 select * from modulos;
-insert into matricular values ('2024001', 'BADAT', 7.50);
+
+insert into matricular values ('2024001', 'BADAT', 7);
+insert into matricular values ('2024002', 'BADAT', 6);
+insert into matricular values ('2024001', 'LMSGI', 4);
+insert into matricular values ('2024003', 'PROGR', 4);
+insert into matricular values ('2024003', 'BADAT', 8);
+
 insert into alumnos values ('2024002', 'ANA', 'ARIAS GARCÍA', '2000-01-27', 'LOPE DE VEGA', '123121212', '25', '33204');
+insert into alumnos values ('2024003', 'LUIS', 'GARCÍA HERNÁNDEZ', '2000-01-27', 'LOPE DE VEGA', '123121212', '25', '33204');
+
 delete from alumnos where (numMat='2024002');
 -- alter table alumnos drop column Mov; -- para borrar una fila entera y todos los datos que hubiese dentro
 
@@ -134,5 +144,19 @@ insert into tutores (id, nombre, apellidos, sueldo) values ('001', 'LUIS', 'GONZ
 select * from tutores;
 
 insert into tutores (id, nombre, apellidos) values ('002', 'CARMEN', 'FERNÁNDEZ LÓPEZ');
+-- borrar los registros de la tabla profesores
 truncate table tutores;
 alter table impartir drop foreign key fk_ImpProf;
+
+-- select siempre va seguido de from
+-- para hacer una consulta ya tienen que estar creadas las tablas
+select * from information_schema.table_constraints where Table_name='alumnos'; 
+
+select nombre, apellidos from alumnos where nombre='JUAN';
+create view aprobados as 
+select alumnos.nombre, alumnos.apellidos 
+from alumnos, matricular 
+where (matricular.nota >= 5) AND (alumnos.numMat = matricular.numMat);
+-- pueden haber varios alumnos con mas de un 5
+
+select * from aprobados;
