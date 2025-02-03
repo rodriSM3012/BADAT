@@ -5,60 +5,55 @@ create schema cpr1;
 
 use cpr1;
 
-create table alumnos(
-    numMat varchar(7),
-    -- se podria poner numMat varchar(7) primary key,
-    nombre varchar(25),
-    apellidos varchar(50),
-    fechaNac date,
-    dir varchar(50),
-    telf varchar(9) comment 'Móvil', -- comentario para un campo
-    edad int,
-    primary key(numMat),
-    -- al usar este metodo se pueden crear claves compuestas
-    constraint ck_Edad check(
-        edad between 18
-        and 35
-    ) -- between si ambos extremos son inclusive   
-    -- se puede poner (edad >= 18 and edad <= 35) 
-) comment 'Tabla alumnos';
+CREATE TABLE alumnos (
+    numMat VARCHAR(7),
+    nombre VARCHAR(25),
+    apellidos VARCHAR(50),
+    fechaNac DATE,
+    dir VARCHAR(50),
+    telf VARCHAR(9) COMMENT 'Móvil',
+    edad INT,
+    PRIMARY KEY (numMat),
+    CONSTRAINT ck_Edad CHECK (edad BETWEEN 18 AND 35)
+)  COMMENT 'Tabla alumnos';
 
-create table modulos(
-    codigo varchar(5),
-    nombre varchar(25),
-    curso varchar(2),
-    ciclo varchar(20) default 'DAW',
-    horas int(3),
-    primary key(codigo)
+CREATE TABLE modulos (
+    codigo VARCHAR(5),
+    nombre VARCHAR(25),
+    curso VARCHAR(2),
+    ciclo VARCHAR(20) DEFAULT 'DAW',
+    horas INT(3),
+    PRIMARY KEY (codigo)
 );
 
-create table matricular(
-    numMat varchar(7),
-    codigo varchar(5),
-    nota decimal(5, 2),
-    -- 5 = total	2 = decimales
-    primary key(numMat, codigo),
-    -- constraint = crear una regla
-    constraint fk_AlumMat foreign key(numMat) references alumnos(numMat),
-    constraint fk_ModMat foreign key(codigo) references modulos(codigo)
+CREATE TABLE matricular (
+    numMat VARCHAR(7),
+    codigo VARCHAR(5),
+    nota DECIMAL(5 , 2 ),
+    PRIMARY KEY (numMat , codigo),
+    CONSTRAINT fk_AlumMat FOREIGN KEY (numMat)
+        REFERENCES alumnos (numMat),
+    CONSTRAINT fk_ModMat FOREIGN KEY (codigo)
+        REFERENCES modulos (codigo)
 );
 
-create table profesores(
-    id varchar(7),
-    nombre varchar(20),
-    apellidos varchar(50),
-    sueldo decimal(7, 2),
-    primary key(id)
+CREATE TABLE profesores (
+    id VARCHAR(7),
+    nombre VARCHAR(20),
+    apellidos VARCHAR(50),
+    sueldo DECIMAL(7 , 2 ),
+    PRIMARY KEY (id)
 );
 
-create table impartir(
-    codigo varchar(5),
-    id varchar(7),
-    horas decimal(2, 0),
-    constraint pk_Imp primary key(codigo, id),
-    -- por separado son fk
-    constraint fk_ImpMod foreign key(codigo) references modulos(codigo),
-    constraint fk_ImpProf foreign key(id) references profesores(id)
+CREATE TABLE impartir (
+    codigo VARCHAR(5),
+    id VARCHAR(7),
+    horas DECIMAL(2 , 0 ),
+    CONSTRAINT pk_Imp PRIMARY KEY (codigo , id),
+    CONSTRAINT fk_ImpMod FOREIGN KEY (codigo)
+        REFERENCES modulos (codigo),
+    CONSTRAINT fk_ImpProf FOREIGN KEY (id)
+        REFERENCES profesores (id)
 );
 
 -- si quieres borrarlo por una equivocacion
@@ -115,7 +110,10 @@ insert into alumnos values ('2024001', 'JUAN', 'ARIAS GARCÍA', '2000-01-27', 'L
 insert into modulos values ('BADAT', 'BASES DE DATOS', 1, 'DAW', 5);
 insert into modulos values ('PROGR', 'PROGRAMACION', 1, 'DAW', 7);
 insert into modulos values ('LMSGI', 'LENGUAJE MARCAS', 1, 'DAW', 3);
-select * from modulos;
+SELECT 
+    *
+FROM
+    modulos;
 
 insert into matricular values ('2024001', 'BADAT', 7);
 insert into matricular values ('2024002', 'BADAT', 6);
@@ -126,7 +124,9 @@ insert into matricular values ('2024003', 'BADAT', 8);
 insert into alumnos values ('2024002', 'ANA', 'ARIAS GARCÍA', '2000-01-27', 'LOPE DE VEGA', '123121212', '25', '33204');
 insert into alumnos values ('2024003', 'LUIS', 'GARCÍA HERNÁNDEZ', '2000-01-27', 'LOPE DE VEGA', '123121212', '25', '33204');
 
-delete from alumnos where (numMat='2024002');
+DELETE FROM alumnos 
+WHERE
+    (numMat = '2024002');
 -- alter table alumnos drop column Mov; -- para borrar una fila entera y todos los datos que hubiese dentro
 
 describe alumnos;
@@ -141,7 +141,10 @@ describe tutores;
 alter table tutores add column dir varchar(50);
 -- para seleccionar ciertos campos en concreto (solo se pueden ignorar campos que no sean no nulos)
 insert into tutores (id, nombre, apellidos, sueldo) values ('001', 'LUIS', 'GONZÁLEZ DÍAZ', 1200.50);
-select * from tutores;
+SELECT 
+    *
+FROM
+    tutores;
 
 insert into tutores (id, nombre, apellidos) values ('002', 'CARMEN', 'FERNÁNDEZ LÓPEZ');
 -- borrar los registros de la tabla profesores
@@ -150,13 +153,56 @@ alter table impartir drop foreign key fk_ImpProf;
 
 -- select siempre va seguido de from
 -- para hacer una consulta ya tienen que estar creadas las tablas
-select * from information_schema.table_constraints where Table_name='alumnos'; 
+SELECT 
+    *
+FROM
+    information_schema.table_constraints
+WHERE
+    Table_name = 'alumnos';
 
-select nombre, apellidos from alumnos where nombre='JUAN';
-create view aprobados as 
-select alumnos.nombre, alumnos.apellidos 
-from alumnos, matricular 
-where (matricular.nota >= 5) AND (alumnos.numMat = matricular.numMat);
+SELECT 
+    nombre, apellidos
+FROM
+    alumnos
+WHERE
+    nombre = 'JUAN';
+CREATE VIEW aprobados AS
+    SELECT 
+        alumnos.nombre, alumnos.apellidos
+    FROM
+        alumnos,
+        matricular
+    WHERE
+        (matricular.nota >= 5)
+            AND (alumnos.numMat = matricular.numMat);
 -- pueden haber varios alumnos con mas de un 5
 
-select * from aprobados;
+SELECT 
+    *
+FROM
+    aprobados;
+
+-- mostrar nombre, apellidos, nombre modulos de alumnos que suspendieron
+CREATE VIEW suspensos AS
+    SELECT 
+        alumnos.nombre, alumnos.apellidos, modulos.nombre
+    FROM
+        alumnos,
+        modulos,
+        matricular
+    WHERE
+        (matricular.nota < 5)
+            AND (alumnos.numMat = matricular.numMat);
+
+SELECT 
+    *
+FROM
+    suspensos;
+    
+drop view suspensos;
+	
+UPDATE modulos 
+SET 
+    horas = horas + 1
+WHERE
+    codigo = 'PROGR'
