@@ -1,10 +1,12 @@
 -- Active: 1738853769087@@127.0.0.1@3306@escuela
+-- 1
 DROP SCHEMA Escuela;
 
 CREATE SCHEMA Escuela;
 
 USE Escuela;
 
+-- 2
 CREATE TABLE PROFESORES (
     DNIProf CHAR(10),
     nombreProf VARCHAR(40),
@@ -29,6 +31,7 @@ CREATE TABLE UTILIZACIONES (
     CONSTRAINT fk_Rec FOREIGN KEY (recurso) REFERENCES RECURSOS (recurso)
 );
 
+-- 3
 INSERT INTO
     PROFESORES (DNIProf, nombreProf, apeProf, despachoProf)
 VALUES
@@ -57,3 +60,62 @@ VALUES
     ('44556689', 'R100', '2019-01-01', '2019-01-15'),
     ('99771122', 'R200', '2019-01-23', '2019-01-26'),
     ('99887766', 'R300', '2019-02-01', '2019-02-06');
+
+-- 4
+INSERT INTO
+    PROFESORES (DNIProf, nombreProf)
+VALUES
+    (55667788, 'Carmen');
+
+-- 5
+SELECT
+    *
+FROM
+    PROFESORES;
+
+SELECT
+    *
+FROM
+    RECURSOS;
+
+SELECT
+    *
+FROM
+    UTILIZACIONES;
+
+-- 9
+-- hace falta borrar los datos del ejercicio 4 porque despachoProf ya no puede estar vacio
+DELETE FROM
+    PROFESORES
+WHERE
+    (DNIProf = 55667788);
+
+ALTER TABLE
+    PROFESORES CHANGE COLUMN despachoProf despachoProf CHAR(10) NOT NULL;
+
+-- 10
+CREATE VIEW Tablets AS
+SELECT
+    UTILIZACIONES.DNIProf,
+    UTILIZACIONES.recurso,
+    UTILIZACIONES.fechaInicio,
+    UTILIZACIONES.fechaFin
+FROM
+    UTILIZACIONES,
+    RECURSOS
+WHERE
+    (RECURSOS.descripRec = 'Tablet PC');
+
+/*
+ CREATE VIEW UtilizacionesTablets AS
+ SELECT
+ u.DNIProf,
+ u.recurso,
+ u.fechaInicio,
+ u.fechaFin
+ FROM
+ UTILIZACIONES u
+ JOIN RECURSOS r ON u.recurso = r.recurso
+ WHERE
+ r.descripRec = 'Tablet PC';
+ */
