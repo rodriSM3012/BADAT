@@ -1,4 +1,4 @@
--- Active: 1738853769087@@127.0.0.1@3306@escuela
+-- Active: 1739172477455@@127.0.0.1@3306
 -- 1
 DROP SCHEMA Escuela;
 
@@ -33,7 +33,7 @@ CREATE TABLE UTILIZACIONES (
 
 -- 3
 INSERT INTO
-    PROFESORES (DNIProf, nombreProf, apeProf, despachoProf)
+    PROFESORES
 VALUES
     (11223344, 'Elvira', 'Castro Nuño', '2.2.B23'),
     (33456456, 'Paula', 'Martínez López', '2.2.B05'),
@@ -42,7 +42,7 @@ VALUES
     (99887766, 'Fernando', 'Calle Asensio', '2.1.C11');
 
 INSERT INTO
-    RECURSOS (recurso, descripRec)
+    RECURSOS
 VALUES
     ('R100', 'Impresora'),
     ('R122', 'Tablet PC'),
@@ -50,7 +50,7 @@ VALUES
     ('R300', 'Scanner');
 
 INSERT INTO
-    UTILIZACIONES (DNIProf, recurso, fechaInicio, fechaFin)
+    UTILIZACIONES
 VALUES
     ('11223344', 'R122', '2019-01-16', '2019-01-31'),
     ('33456456', 'R122', '2019-01-01', '2019-01-15'),
@@ -83,6 +83,43 @@ SELECT
 FROM
     UTILIZACIONES;
 
+-- 6
+ALTER TABLE
+    UTILIZACIONES DROP FOREIGN KEY fk_Rec;
+
+ALTER TABLE
+    UTILIZACIONES
+ADD
+    CONSTRAINT fk_Rec FOREIGN KEY (recurso) REFERENCES RECURSOS (recurso) ON DELETE CASCADE;
+
+ALTER TABLE
+    UTILIZACIONES DROP FOREIGN KEY fk_dniProf;
+
+ALTER TABLE
+    UTILIZACIONES
+ADD
+    CONSTRAINT fk_dniProf FOREIGN KEY (DNIProf) REFERENCES PROFESORES (DNIProf) ON DELETE CASCADE;
+
+-- 7 
+ALTER TABLE
+    PROFESORES
+ADD
+    CONSTRAINT ck_apeProfMayus CHECK (apeProf = upper(apeProf));
+
+-- 8
+ALTER TABLE
+    RECURSOS
+ADD
+    CONSTRAINT ck_recDisp CHECK (
+        recurso IN (
+            'Impresora',
+            'Tablet PC',
+            'Portátil',
+            'Proyector',
+            'Scanner'
+        )
+    );
+
 -- 9
 -- hace falta borrar los datos del ejercicio 4 porque despachoProf ya no puede estar vacio
 DELETE FROM
@@ -91,7 +128,9 @@ WHERE
     (DNIProf = 55667788);
 
 ALTER TABLE
-    PROFESORES CHANGE COLUMN despachoProf despachoProf CHAR(10) NOT NULL;
+    PROFESORES
+MODIFY
+    despachoProf CHAR(10) NOT NULL;
 
 -- 10
 CREATE VIEW Tablets AS
@@ -104,18 +143,41 @@ FROM
     UTILIZACIONES,
     RECURSOS
 WHERE
-    (RECURSOS.descripRec = 'Tablet PC');
+    (UTILIZACIONES.recurso = RECURSOS.recurso)
+    AND (RECURSOS.descripRec = 'Tablet PC');
 
-/*
- CREATE VIEW UtilizacionesTablets AS
- SELECT
- u.DNIProf,
- u.recurso,
- u.fechaInicio,
- u.fechaFin
- FROM
- UTILIZACIONES u
- JOIN RECURSOS r ON u.recurso = r.recurso
- WHERE
- r.descripRec = 'Tablet PC';
- */
+-- 11
+CREATE VIEW UtilImpres AS
+SELECT
+    UTILIZACIONES.DNIProf,
+    UTILIZACIONES.recurso,
+    UTILIZACIONES.fechaInicio,
+    UTILIZACIONES.fechaFin
+FROM
+    UTILIZACIONES,
+    RECURSOS
+WHERE
+    (UTILIZACIONES.recurso = RECURSOS.recurso)
+    AND (RECURSOS.descripRec = 'Impresora');
+
+-- 15
+SELECT
+    *
+FROM
+    information_schema.TABLE_CONSTRAINTS
+WHERE
+    TABLE_NAME = 'PROFESORES';
+
+SELECT
+    *
+FROM
+    information_schema.TABLE_CONSTRAINTS
+WHERE
+    TABLE_NAME = 'RECURSOS';
+
+SELECT
+    *
+FROM
+    information_schema.TABLE_CONSTRAINTS
+WHERE
+    TABLE_NAME = 'UTILIZACIONES';
