@@ -221,17 +221,17 @@ ORDER BY 1;
 -- N. Para los empleados del departamento 112, obtener el nombre y el salario total
 -- de cada uno (salario más comisión), por orden de salario total decreciente, y
 -- por orden alfabético dentro de salario total.
-SELECT NOMEMP, (SALARIO + COMISION) AS "SALARIO TOTAL"
+SELECT NOMEMP, (SALARIO + NVL(COMISION, 0)) AS "SALARIO TOTAL"
 FROM EMPLEADOS
 WHERE (NUMDEP = 112)
 ORDER BY 2 DESC, 1;
 
 -- O. Hallar por orden de número de empleado el nombre y salario total (salario más
 -- comisión) de los empleados cuyo salario total supera a 2300€ mensuales.
-SELECT NOMEMP, (SALARIO + COMISION) AS "SALARIO TOTAL"
+SELECT NUMEMP, NOMEMP, (SALARIO + NVL(COMISION, 0)) AS "SALARIO TOTAL"
 FROM EMPLEADOS
-WHERE (SALARIO + COMISION) > 2300
-ORDER BY NUMEMP;
+WHERE (SALARIO + NVL(COMISION, 0)) > 2300
+ORDER BY 1;
 
 -- P. Obtener los números de los departamentos en los que haya algún empleado
 -- cuya comisión supere el 10% de su salario.
@@ -248,7 +248,7 @@ ORDER BY 1;
 
 -- R. Obtener por orden alfabético los nombres de los empleados cuyo primer
 -- apellido comienza por Al.
-SELECT NOMEMP	
+SELECT NOMEMP
 FROM EMPLEADOS
 WHERE (NOMEMP LIKE 'Al%')
 ORDER BY 1;
@@ -256,7 +256,7 @@ ORDER BY 1;
 -- S. Obtener los nombres de los empleados cuyo nombre de pila empieza por L.
 SELECT NOMEMP
 FROM EMPLEADOS
-WHERE (NOMEMP LIKE '%, L%')
+WHERE (NOMEMP LIKE '%, L%');
 
 -- T. Obtener por orden alfabético los nombres de empleados que tengan un primer
 -- apellido de siete letras.
