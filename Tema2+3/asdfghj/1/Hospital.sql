@@ -1,4 +1,4 @@
--- Active: 1738853769087@@127.0.0.1@3306@hospital
+-- Active: 1739172477455@@127.0.0.1@3306@hospital
 -- 1 Crea una base de datos llamada "Hospital".
 DROP SCHEMA Hospital;
 
