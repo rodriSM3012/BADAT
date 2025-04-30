@@ -1,0 +1,10 @@
+DECLARE
+    vCont NUMBER(2);
+
+BEGIN 
+    FOR vCont IN 1..10 LOOP     -- FOR vCont IN REVERSE 1..10 LOOP
+        INSERT INTO TEMPORAL VALUES (vCont);
+    END LOOP;
+END;
+
+SELECt * FROM TEMPORAL;
