@@ -63,3 +63,22 @@ BEGIN
     vMes := TO_CHAR(vFecha, 'Month'); -- guardar
     DBMS_OUTPUT.put_line('Fecha: ' || vDate); -- imprimir
 END;
+
+
+-- 5. Escribir un bloque que visualice el númeri de trienios completos 
+--    que hay entre dos fechas que se introducirán como parámetros 
+--    de sustitución
+DECLARE 
+    vFecha DATE;
+    vFecha2 DATE;
+    vYear NUMBER(3);
+    vTrienio NUMBER(3);
+
+BEGIN 
+    vFecha := '&vFecha';
+    vFecha2 := '&vFecha2';
+    vYear := TRUNC (ABS (MONTHS_BETWEEN (vFecha, vFecha2)/12));
+    vTrienio := vYear / 3;
+
+    DBMS_OUTPUT.put_line('Han pasado ' || vTrienio || ' entre ');
+END;
