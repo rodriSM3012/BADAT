@@ -29,4 +29,37 @@ END;
 
 -- 4. Escribir un bloque que lea una fecha en formato dd/mm/yy y visualice 
 --    el mes en letra correspondiente a esa fecha. TOCHAR()
+/*
+DECLARE
+    vNumMonth NUMBER(2);
+    vDate DATE := TO_DATE('&vDate', 'DD/MM/YY');
+    vNumMonth := TO_NUMBER(TO_CHAR(vDate, 'MM'));
+    vMonth VARCHAR2(20);
+BEGIN
+    CASE 
+        WHEN vNumMonth = 1 THEN vMonth := 'enero';
+        WHEN vNumMonth = 2 THEN vMonth := 'febrero';
+        WHEN vNumMonth = 3 THEN vMonth := 'marzo';
+        WHEN vNumMonth = 4 THEN vMonth := 'abril';
+        WHEN vNumMonth = 5 THEN vMonth := 'mayo';
+        WHEN vNumMonth = 6 THEN vMonth := 'junio';
+        WHEN vNumMonth = 7 THEN vMonth := 'julio';
+        WHEN vNumMonth = 8 THEN vMonth := 'agosto';
+        WHEN vNumMonth = 9 THEN vMonth := 'septiembre';
+        WHEN vNumMonth = 10 THEN vMonth := 'octubre';
+        WHEN vNumMonth = 11 THEN vMonth := 'noviembre';
+        WHEN vNumMonth = 12 THEN vMonth := 'diciembre';
+        ELSE vMonth := 'ERROR';
+    END CASE;
+    DBMS_OUTPUT.put_line('El mes es: ' || vMonth);
+END;
+*/
 
+DECLARE 
+    vFecha DATE;
+    vMes VARCHAR2 (20);
+BEGIN 
+    vFecha := '&vFecha'; -- leer por teclado
+    vMes := TO_CHAR(vFecha, 'Month'); -- guardar
+    DBMS_OUTPUT.put_line('Fecha: ' || vDate); -- imprimir
+END;
