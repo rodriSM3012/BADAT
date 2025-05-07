@@ -82,3 +82,19 @@ BEGIN
 
     DBMS_OUTPUT.put_line('Han pasado ' || vTrienio || ' entre ');
 END;
+
+-- 6. Escribir un bloque que reciba una cadena y la visualice al revés. 
+--    Puedes usar la función SUBSTR para ir extrayendo carácter a carácter.
+DECLARE 
+    vCadOriginal VARCHAR2(20);
+    vCadInv VARCHAR2(20);
+BEGIN 
+    vCadOriginal := '&vCadOriginal';
+    
+    FOR i IN REVERSE 1..length (vCadOriginal) LOOP 
+        vCadInv := vCadInv || SUBSTR(vCadOriginal, i, 1); -- SUBSTR([cadena], [posicion], [cantidad])
+    END LOOP;
+
+    DBMS_OUTPUT.put_line('Cadena original: ' || vCadOriginal);
+    DBMS_OUTPUT.put_line('Cadena invertida: ' || vCadInv);
+END;
