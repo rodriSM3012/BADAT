@@ -98,3 +98,33 @@ BEGIN
     DBMS_OUTPUT.put_line('Cadena original: ' || vCadOriginal);
     DBMS_OUTPUT.put_line('Cadena invertida: ' || vCadInv);
 END;
+
+-- 7. Escribir un bloque que modifique el presupuesto de un departamento. Se leerán
+--    como parámetros de sustitución el número de departamento y el nuevo
+--    presupuesto. Si el departamento no existe se mostrará un mensaje indicándolo.
+DECLARE
+    vNumDep CreaEpsa.DEPARTAMENTOS.NUMDEP % TYPE;
+    vNuevoPres CreaEpsa.DEPARTAMENTOS.PRESUP % TYPE;
+    vCont NUMBER(4);
+    vComentario VARCHAR2(40);
+BEGIN 
+    -- no hay que poner '' porque son numeros ↓↓↓
+    vNumDep := &vNumDep;
+    vNuevoPres := &vNuevoPres;
+
+    SELECT COUNT(*) 
+    INTO vCont
+    FROM DEPARTAMENTOS
+    WHERE NUMDEP = vNumDep;
+
+    IF vCont = 0 THEN vComentario := ('No hay departamentos con el número ' || vNumDep ||'.');
+    ELSE
+        UPDATE DEPARTAMENTOS
+        SET PRESUP := vNuevoPres
+        WHERE NUMDEP = vNumDep;
+
+        vComentario := 'Presupuesto actualizado.';
+    END IF;
+
+    DBMS_OUTPUT.put_line(vComentario);
+END;
